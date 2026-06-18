@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
-export default function CreatePostPage() {
+function CreatePostContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialProblemId = searchParams.get('problemId');
@@ -93,5 +93,13 @@ export default function CreatePostPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function CreatePostPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-screen pt-24 text-center">Loading...</div>}>
+      <CreatePostContent />
+    </React.Suspense>
   );
 }

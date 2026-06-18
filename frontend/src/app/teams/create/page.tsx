@@ -88,7 +88,7 @@ export default function CreateTeamPage() {
               <Label htmlFor="privacy">Privacy Mode</Label>
               <Select 
                 value={formData.privacy} 
-                onValueChange={(value) => setFormData({ ...formData, privacy: value })}
+                onValueChange={(value) => setFormData({ ...formData, privacy: value || 'PUBLIC' })}
               >
                 <SelectTrigger id="privacy">
                   <SelectValue placeholder="Select privacy" />
