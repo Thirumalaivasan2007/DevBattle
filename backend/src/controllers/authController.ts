@@ -38,6 +38,11 @@ export const registerUser = async (req: Request, res: Response) => {
         role: user.role,
         rating: user.rating,
         rank: user.rank,
+        xp: user.xp,
+        level: user.level,
+        coins: user.coins,
+        currentStreak: user.currentStreak,
+        longestStreak: user.longestStreak,
         token: generateToken(user._id as string),
       });
     } else {
@@ -71,6 +76,11 @@ export const loginUser = async (req: Request, res: Response) => {
         role: user.role,
         rating: user.rating,
         rank: user.rank,
+        xp: user.xp,
+        level: user.level,
+        coins: user.coins,
+        currentStreak: user.currentStreak,
+        longestStreak: user.longestStreak,
         token: generateToken(user._id as string),
       });
     } else {
@@ -104,8 +114,12 @@ export const getUserProfile = async (req: Request, res: Response) => {
       rank: user.rank,
       solvedProblems: user.solvedProblems,
       contestsParticipated: user.contestsParticipated,
-      streak: user.streak,
+      currentStreak: user.currentStreak,
+      longestStreak: user.longestStreak,
       badgesCount: user.badgesCount,
+      xp: user.xp,
+      level: user.level,
+      coins: user.coins,
     });
   } else {
     res.status(404).json({ message: 'User not found' });

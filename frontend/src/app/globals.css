@@ -96,6 +96,11 @@
   --ring: #3B82F6;
 }
 
+/* Mobile Navigation Offset */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -138,7 +138,7 @@ export default function ComparePage() {
                 <div className="space-y-2">
                   {renderStatCard('Rating', data.userA.profile.rating || data.userA.profile.highestRating, data.userB.profile.rating || data.userB.profile.highestRating, Trophy)}
                   {renderStatCard('Solved Problems', data.userA.profile.solvedProblems, data.userB.profile.solvedProblems, Target)}
-                  {renderStatCard('Current Streak', data.userA.profile.streak, data.userB.profile.streak, Zap)}
+                  {renderStatCard('Current Streak', data.userA.profile.currentStreak || 0, data.userB.profile.currentStreak || 0, Zap)}
                   {renderStatCard('Acceptance Rate', `${data.userA.stats?.acceptanceRate || 0}%`, `${data.userB.stats?.acceptanceRate || 0}%`, Crosshair)}
                 </div>
               </CardContent>

@@ -8,11 +8,12 @@ import {
   deleteProblem
 } from '../controllers/problemController';
 import { protect, admin } from '../middlewares/authMiddleware';
+import { cacheMiddleware } from '../services/redisService';
 
 const router = express.Router();
 
 router.route('/')
-  .get(getProblems)
+  .get(cacheMiddleware(60), getProblems)
   .post(protect, admin, createProblem);
 
 router.route('/id/:id')

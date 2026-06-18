@@ -1,0 +1,46 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [backend, frontend, execution-engine]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './${{ matrix.service }}/package-lock.json'
+
+    - name: Install Dependencies
+      working-directory: ./${{ matrix.service }}
+      run: npm ci
+
+    - name: Run Build
+      working-directory: ./${{ matrix.service }}
+      run: npm run build
+      env:
+        NEXT_TELEMETRY_DISABLED: 1
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run npm audit (Backend)
+      working-directory: ./backend
+      run: npm audit --audit-level=high || true # Warn only
+    - name: Run npm audit (Frontend)
+      working-directory: ./frontend
+      run: npm audit --audit-level=high || true # Warn only

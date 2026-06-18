@@ -6,7 +6,7 @@ import CodeEditor from './CodeEditor';
 import ConsolePanel from './ConsolePanel';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 interface WorkspaceProps {
   problemDescription: React.ReactNode;
@@ -14,6 +14,7 @@ interface WorkspaceProps {
 
 export default function Workspace({ problemDescription }: WorkspaceProps) {
   const params = useParams();
+  const searchParams = useSearchParams();
   const problemSlug = params.slug as string;
   const [problemId, setProblemId] = useState<string | null>(null);
 
@@ -84,6 +85,7 @@ export default function Workspace({ problemDescription }: WorkspaceProps) {
         problemId,
         sourceCode,
         language,
+        contestId: searchParams.get('contest')
       });
       setSubmissionResult(response.data);
       if (response.data.verdict === 'Accepted') {

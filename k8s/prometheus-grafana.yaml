@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+# Placeholder for Prometheus & Grafana Helm Chart configs
+# In a real environment, we use Helm:
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring
+#
+# This file serves as a custom ServiceMonitor to scrape our backend
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devbattle-backend-monitor
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  namespaceSelector:
+    matchNames:
+    - devbattle
+  endpoints:
+  - port: 5000
+    path: /api/metrics
+    interval: 15s

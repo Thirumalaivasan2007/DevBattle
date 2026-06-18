@@ -5,7 +5,8 @@ import {
   getUserStats,
   getUserActivity,
   getUserHeatmap,
-  getUserAchievements
+  getUserAchievements,
+  getUserContestHistory
 } from '../controllers/userController';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get('/:username/stats', getUserStats);
 router.get('/:username/activity', getUserActivity);
 router.get('/:username/heatmap', getUserHeatmap);
 router.get('/:username/achievements', getUserAchievements);
+router.get('/:username/contests/history', getUserContestHistory);
 
 export default router;

@@ -160,3 +160,27 @@ export const getUserAchievements = async (req: Request, res: Response): Promise<
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// @desc    Get user contest history
+// @route   GET /api/users/:username/contests/history
+// @access  Public
+export const getUserContestHistory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    // We need to import ContestStanding here dynamically or at top
+    const ContestStanding = require('../models/ContestStanding').default;
+    
+    const history = await ContestStanding.find({ userId: user._id })
+      .populate('contestId', 'title slug')
+      .sort({ createdAt: -1 });
+
+    res.json(history);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};

@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import UserStats from '../models/UserStats';
 import UserActivity from '../models/UserActivity';
 import Achievement from '../models/Achievement';
+import gamificationService from '../services/gamificationService';
+import missionService from '../services/missionService';
 import User from '../models/User';
 import { ISubmission } from '../models/Submission';
 import { IProblem } from '../models/Problem';
@@ -46,6 +48,19 @@ export const updateStatsAndAchievements = async (
 
         // Increment User.solvedProblems
         await User.findByIdAndUpdate(userId, { $inc: { solvedProblems: 1 } });
+
+        // Phase 10: Gamification Engine
+        let xpReward = 10;
+        let coinReward = 5;
+        if (problem.difficulty === 'Medium') { xpReward = 25; coinReward = 10; }
+        else if (problem.difficulty === 'Hard') { xpReward = 50; coinReward = 25; }
+
+        await gamificationService.grantXP(userId, 'SOLVED_PROBLEM', xpReward, { problemId: problem._id, difficulty: problem.difficulty });
+        await gamificationService.grantCoins(userId, coinReward, `Solved ${problem.difficulty} problem: ${problem.title}`, { problemId: problem._id });
+
+        // Update missions
+        await missionService.processAction(userId, 'SOLVE_PROBLEM', 1);
+        await missionService.processAction(userId, `SOLVE_${problem.difficulty.toUpperCase()}`, 1);
       }
     } else {
       if (verdict === 'Wrong Answer') stats.wrongAnswerCount += 1;

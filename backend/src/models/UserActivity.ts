@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUserActivity extends Document {
   userId: mongoose.Types.ObjectId;
-  activityType: 'ACCEPTED_PROBLEM' | 'NEW_BADGE' | 'RATING_MILESTONE' | 'CONTEST_PARTICIPATION' | 'BATTLE_WIN' | 'SUBMISSION';
+  activityType: 'ACCEPTED_PROBLEM' | 'NEW_BADGE' | 'RATING_MILESTONE' | 'CONTEST_PARTICIPATION' | 'BATTLE_WIN' | 'SUBMISSION' | 'COMPLETED_DAILY_CHALLENGE';
   metadata: {
     problemId?: mongoose.Types.ObjectId;
     problemTitle?: string;
@@ -20,7 +20,7 @@ const UserActivitySchema: Schema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     activityType: {
       type: String,
-      enum: ['ACCEPTED_PROBLEM', 'NEW_BADGE', 'RATING_MILESTONE', 'CONTEST_PARTICIPATION', 'BATTLE_WIN', 'SUBMISSION'],
+      enum: ['ACCEPTED_PROBLEM', 'NEW_BADGE', 'RATING_MILESTONE', 'CONTEST_PARTICIPATION', 'BATTLE_WIN', 'SUBMISSION', 'COMPLETED_DAILY_CHALLENGE'],
       required: true,
     },
     metadata: {

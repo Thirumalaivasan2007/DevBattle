@@ -97,7 +97,7 @@ export default function ConsolePanel({
             {isRunning && (
               <div className="flex h-full items-center justify-center text-muted-foreground flex-col gap-3">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <p>Executing Code on Judge0...</p>
+                <p>Executing Code...</p>
               </div>
             )}
 

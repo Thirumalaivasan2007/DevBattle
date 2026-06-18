@@ -8,6 +8,11 @@ interface User {
   role: string;
   rating: number;
   rank: string;
+  xp?: number;
+  level?: number;
+  coins?: number;
+  currentStreak?: number;
+  longestStreak?: number;
 }
 
 interface AuthState {

@@ -7,7 +7,7 @@ const router = express.Router();
 
 const submitLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5, // 5 submissions per minute
+  max: process.env.NODE_ENV === 'production' ? 5 : 1000, // Higher limit for dev
   message: { message: 'Too many submissions, please try again later.' }
 });
 

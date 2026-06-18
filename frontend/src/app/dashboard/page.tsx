@@ -118,7 +118,7 @@ export default function DashboardPage() {
           />
           <StatCard
             title="Current Streak"
-            value={`${profileData.streak} days`}
+            value={`${profileData.currentStreak || 0} days`}
             icon={<Flame className="h-5 w-5 text-orange-500" />}
             description="Keep it up!"
           />
@@ -128,6 +128,37 @@ export default function DashboardPage() {
             icon={<Award className="h-5 w-5 text-primary" />}
             description={`${profileData.badgesCount} badges earned`}
           />
+        </div>
+
+        {/* Gamification Links */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20 hover:border-orange-500/50 transition-all cursor-pointer" onClick={() => router.push('/missions')}>
+            <CardContent className="p-6 flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-lg mb-1">Missions</h3>
+                <p className="text-sm text-muted-foreground">Complete tasks for XP</p>
+              </div>
+              <div className="bg-orange-500/20 p-3 rounded-full"><Target className="w-6 h-6 text-orange-500" /></div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20 hover:border-blue-500/50 transition-all cursor-pointer" onClick={() => router.push('/season-pass')}>
+            <CardContent className="p-6 flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-lg mb-1">Season Pass</h3>
+                <p className="text-sm text-muted-foreground">Unlock rewards</p>
+              </div>
+              <div className="bg-blue-500/20 p-3 rounded-full"><Activity className="w-6 h-6 text-blue-500" /></div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-yellow-500/20 hover:border-yellow-500/50 transition-all cursor-pointer" onClick={() => router.push('/store')}>
+            <CardContent className="p-6 flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-lg mb-1">Store & Inventory</h3>
+                <p className="text-sm text-muted-foreground">Spend your coins</p>
+              </div>
+              <div className="bg-yellow-500/20 p-3 rounded-full"><Trophy className="w-6 h-6 text-yellow-500" /></div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Recent Activity */}
@@ -151,10 +182,20 @@ export default function DashboardPage() {
                           <h4 className="font-semibold text-lg">Solved "{act.metadata?.problemTitle}"</h4>
                           <p className="text-sm text-muted-foreground">Problem Solving</p>
                         </>
+                      ) : act.activityType === 'COMPLETED_DAILY_CHALLENGE' ? (
+                        <>
+                          <h4 className="font-semibold text-lg text-orange-500">Completed Daily Challenge: {act.metadata?.problemTitle}</h4>
+                          <p className="text-sm text-muted-foreground">Daily Habit Tracker</p>
+                        </>
                       ) : act.activityType === 'NEW_BADGE' ? (
                         <>
                           <h4 className="font-semibold text-lg text-primary">Earned "{act.metadata?.badgeName}"</h4>
                           <p className="text-sm text-muted-foreground">Achievement Unlocked</p>
+                        </>
+                      ) : act.activityType === 'LEVEL_UP' ? (
+                        <>
+                          <h4 className="font-semibold text-lg text-yellow-500">Reached Level {act.metadata?.newLevel}!</h4>
+                          <p className="text-sm text-muted-foreground">Gamification</p>
                         </>
                       ) : (
                         <h4 className="font-semibold text-lg">Activity logged</h4>
