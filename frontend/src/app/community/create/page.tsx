@@ -53,7 +53,7 @@ export default function CreatePostPage() {
               
               <div className="space-y-2">
                 <label className="text-sm font-medium">Post Type</label>
-                <Select value={postType} onValueChange={setPostType}>
+                <Select value={postType} onValueChange={(val) => setPostType(val || 'GENERAL')}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>

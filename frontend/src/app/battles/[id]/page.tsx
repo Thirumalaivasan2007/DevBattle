@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/axios';
 import { useSocketStore } from '@/store/socketStore';
 import { useAuthStore } from '@/store/authStore';
-import CodeEditor from '@/components/CodeEditor';
+import CodeEditor from '@/components/workspace/CodeEditor';
 import { Button } from '@/components/ui/button';
 import { Swords, CheckCircle2, XCircle, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
