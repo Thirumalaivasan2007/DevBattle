@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [backend, frontend, execution-engine]
+        service: [backend, frontend]
     steps:
     - uses: actions/checkout@v3
 

@@ -17,8 +17,8 @@ export default function AdminCommunityPage() {
   useEffect(() => {
     const fetchDiscussions = async () => {
       try {
-        const response = await api.get('/community/discussions'); // Existing public endpoint
-        setDiscussions(response.data);
+        const response = await api.get('/community/posts'); // Existing public endpoint
+        setDiscussions(response.data.posts || response.data);
       } catch (error: any) {
         toast.error("Failed to fetch community data", {
           description: error.response?.data?.message || "Internal server error"
@@ -71,7 +71,7 @@ export default function AdminCommunityPage() {
                         <TableCell className="font-medium max-w-[300px] truncate">{post.title}</TableCell>
                         <TableCell className="text-muted-foreground">{post.author?.username || 'Unknown'}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary">{post.category}</Badge>
+                          <Badge variant="outline">{post.postType}</Badge>
                         </TableCell>
                         <TableCell className="text-muted-foreground">
                           {post.upvotes?.length || 0} / {post.comments?.length || 0}
