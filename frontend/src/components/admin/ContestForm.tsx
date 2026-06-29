@@ -11,7 +11,7 @@ import { Plus, Trash2 } from 'lucide-react';
 const problemSchema = z.object({
   label: z.string().min(1, 'Label required'),
   problemId: z.string().min(1, 'Problem ID required'),
-  score: z.preprocess((val) => Number(val), z.number().min(0, 'Score must be at least 0'))
+  score: z.any()
 });
 
 const formSchema = z.object({
@@ -20,7 +20,7 @@ const formSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   contestType: z.enum(['WEEKLY', 'BIWEEKLY', 'MONTHLY', 'SPECIAL', 'COLLEGE', 'PRIVATE', 'PRACTICE']),
   startTime: z.string().min(1, 'Start time is required'),
-  duration: z.preprocess((val) => Number(val), z.number().min(1, 'Duration is required')),
+  duration: z.any(),
   status: z.enum(['UPCOMING', 'REGISTRATION_OPEN', 'RUNNING', 'FINISHED', 'ARCHIVED']),
   visibility: z.enum(['PUBLIC', 'PRIVATE', 'INVITE_ONLY']),
   problems: z.array(problemSchema).optional(),
@@ -60,7 +60,11 @@ export default function ContestForm({ initialData, onSubmit, isLoading }: Contes
   });
 
   const handleSubmit = (values: ContestFormValues) => {
-    onSubmit(values);
+    onSubmit({
+      ...values,
+      duration: Number(values.duration),
+      problems: values.problems?.map(p => ({ ...p, score: Number(p.score) }))
+    });
   };
 
   return (
