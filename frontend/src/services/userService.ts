@@ -1,33 +1,31 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/users';
+import api from '../lib/axios';
 
 export const getUserProfile = async (username: string) => {
-  const response = await axios.get(`${API_URL}/profile/${username}`);
+  const response = await api.get(`/users/profile/${username}`);
   return response.data;
 };
 
 export const searchUsers = async (query: string, page = 1, limit = 20) => {
-  const response = await axios.get(`${API_URL}/search?q=${query}&page=${page}&limit=${limit}`);
+  const response = await api.get(`/users/search?q=${query}&page=${page}&limit=${limit}`);
   return response.data;
 };
 
 export const getUserStats = async (username: string) => {
-  const response = await axios.get(`${API_URL}/${username}/stats`);
+  const response = await api.get(`/users/${username}/stats`);
   return response.data;
 };
 
 export const getUserActivity = async (username: string, limit = 20) => {
-  const response = await axios.get(`${API_URL}/${username}/activity?limit=${limit}`);
+  const response = await api.get(`/users/${username}/activity?limit=${limit}`);
   return response.data;
 };
 
 export const getUserHeatmap = async (username: string) => {
-  const response = await axios.get(`${API_URL}/${username}/heatmap`);
+  const response = await api.get(`/users/${username}/heatmap`);
   return response.data;
 };
 
 export const getUserAchievements = async (username: string) => {
-  const response = await axios.get(`${API_URL}/${username}/achievements`);
+  const response = await api.get(`/users/${username}/achievements`);
   return response.data;
 };
