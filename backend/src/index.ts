@@ -59,6 +59,7 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 // Rate Limiting
+app.set('trust proxy', 1); // Trust first proxy (Render, Vercel, etc.)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: process.env.NODE_ENV === 'production' ? 100 : 10000, // Higher limit for dev
