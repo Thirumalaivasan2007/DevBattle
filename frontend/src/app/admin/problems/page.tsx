@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function AdminProblemsPage() {
   const [problems, setProblems] = useState<any[]>([]);
@@ -29,6 +30,19 @@ export default function AdminProblemsPage() {
     fetchProblems();
   }, [toast]);
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this problem?')) return;
+    try {
+      await api.delete(`/problems/${id}`);
+      toast.success("Problem deleted successfully");
+      setProblems(problems.filter(p => p._id !== id));
+    } catch (error: any) {
+      toast.error("Failed to delete problem", {
+        description: error.response?.data?.message || "Internal server error"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -36,10 +50,12 @@ export default function AdminProblemsPage() {
           <h1 className="text-3xl font-bold tracking-tight">Problem Management</h1>
           <p className="text-muted-foreground">Add, edit, or delete coding challenges.</p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add Problem
-        </Button>
+        <Link href="/admin/problems/create">
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Add Problem
+          </Button>
+        </Link>
       </div>
 
       <Card className="border-border/40 shadow-sm">
@@ -99,8 +115,12 @@ export default function AdminProblemsPage() {
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
                             <Button variant="ghost" size="icon" title="View/Test Cases"><Eye className="h-4 w-4" /></Button>
-                            <Button variant="ghost" size="icon" title="Edit Problem"><Edit className="h-4 w-4 text-blue-500" /></Button>
-                            <Button variant="ghost" size="icon" title="Delete Problem"><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                            <Link href={`/admin/problems/edit/${problem._id}`}>
+                              <Button variant="ghost" size="icon" title="Edit Problem"><Edit className="h-4 w-4 text-blue-500" /></Button>
+                            </Link>
+                            <Button variant="ghost" size="icon" title="Delete Problem" onClick={() => handleDelete(problem._id)}>
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>

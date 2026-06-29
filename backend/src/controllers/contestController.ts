@@ -154,3 +154,36 @@ export const endContest = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+// PUT /api/contests/:id (ADMIN)
+export const updateContest = async (req: Request, res: Response) => {
+  try {
+    const contest = await Contest.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!contest) return res.status(404).json({ message: 'Contest not found' });
+    res.json(contest);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// DELETE /api/contests/:id (ADMIN)
+export const deleteContest = async (req: Request, res: Response) => {
+  try {
+    const contest = await Contest.findByIdAndDelete(req.params.id);
+    if (!contest) return res.status(404).json({ message: 'Contest not found' });
+    res.json({ message: 'Contest deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// GET /api/contests/id/:id
+export const getContestById = async (req: Request, res: Response) => {
+  try {
+    const contest = await Contest.findById(req.params.id).populate('problems.problemId', 'title slug');
+    if (!contest) return res.status(404).json({ message: 'Contest not found' });
+    res.json(contest);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};

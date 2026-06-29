@@ -9,6 +9,7 @@ import { Loader2, Plus, Edit, Trash2, Calendar, Users } from 'lucide-react';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 export default function AdminContestsPage() {
   const [contests, setContests] = useState<any[]>([]);
@@ -30,6 +31,19 @@ export default function AdminContestsPage() {
     fetchContests();
   }, [toast]);
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this contest?')) return;
+    try {
+      await api.delete(`/contests/${id}`);
+      toast.success("Contest deleted successfully");
+      setContests(contests.filter(c => c._id !== id));
+    } catch (error: any) {
+      toast.error("Failed to delete contest", {
+        description: error.response?.data?.message || "Internal server error"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -37,10 +51,12 @@ export default function AdminContestsPage() {
           <h1 className="text-3xl font-bold tracking-tight">Contest Management</h1>
           <p className="text-muted-foreground">Schedule, edit, and monitor global competitions.</p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Create Contest
-        </Button>
+        <Link href="/admin/contests/create">
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Create Contest
+          </Button>
+        </Link>
       </div>
 
       <Card className="border-border/40 shadow-sm">
@@ -99,8 +115,12 @@ export default function AdminContestsPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="icon" title="Edit Contest"><Edit className="h-4 w-4 text-blue-500" /></Button>
-                            <Button variant="ghost" size="icon" title="Delete Contest"><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                            <Link href={`/admin/contests/edit/${contest._id}`}>
+                              <Button variant="ghost" size="icon" title="Edit Contest"><Edit className="h-4 w-4 text-blue-500" /></Button>
+                            </Link>
+                            <Button variant="ghost" size="icon" title="Delete Contest" onClick={() => handleDelete(contest._id)}>
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
