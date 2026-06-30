@@ -60,9 +60,13 @@ export default function ContestForm({ initialData, onSubmit, isLoading }: Contes
   });
 
   const handleSubmit = (values: ContestFormValues) => {
+    const start = new Date(values.startTime);
+    const end = new Date(start.getTime() + Number(values.duration) * 60000);
+
     onSubmit({
       ...values,
       duration: Number(values.duration),
+      endTime: end.toISOString(),
       problems: values.problems?.map(p => ({ ...p, score: Number(p.score) }))
     });
   };
