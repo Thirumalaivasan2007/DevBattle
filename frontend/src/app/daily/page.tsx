@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Flame, Clock, Users, ArrowRight } from 'lucide-react';
+import { Flame, Clock, Users, ArrowRight, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { ActivityCalendar } from 'react-activity-calendar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -67,6 +67,8 @@ export default function DailyChallengePage() {
     enabled: !!user?.username
   });
 
+  const isSolved = user && challenge?.participants?.some((p: any) => p._id === user._id || p.username === user.username);
+
   return (
     <div className="container mx-auto py-10 max-w-5xl">
       <div className="flex justify-between items-center mb-8">
@@ -114,11 +116,17 @@ export default function DailyChallengePage() {
             </CardContent>
             <CardFooter>
               {challenge && challenge.problemId ? (
-                <Link href={`/problems/${challenge.problemId.slug}`} className="w-full">
-                  <Button className="w-full" size="lg">
-                    Solve Challenge <ArrowRight className="w-4 h-4 ml-2" />
+                isSolved ? (
+                  <Button className="w-full bg-green-500/10 text-green-500 hover:bg-green-500/20 border border-green-500/30" size="lg" disabled>
+                    <CheckCircle className="w-4 h-4 mr-2" /> Completed
                   </Button>
-                </Link>
+                ) : (
+                  <Link href={`/problems/${challenge.problemId.slug}`} className="w-full">
+                    <Button className="w-full" size="lg">
+                      Solve Challenge <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                )
               ) : (
                 <Button className="w-full" size="lg" disabled>Check back tomorrow</Button>
               )}
